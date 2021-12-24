@@ -9,21 +9,19 @@ function PlaceDiscEvent() {
 }
 
 function Display(grid) {
-    //document.getElementById("myTable").rows[0].cells[0].innerHTML
     for (let rowId = 0; rowId < grid.length; rowId++) {
         for (let cellId = 0; cellId < grid[rowId].length; cellId++) {
+            var cell = document.getElementById("connect4-grid").rows[rowId].cells[cellId]
+
             switch (grid[rowId][cellId]) {
                 case connext4.Players.Rood:
-                    document.getElementById("myTable").rows[0].cells[0].className = "Red";
-                    document.getElementById("myTable").rows[0].cells[0].textContent = "O"
+                    cell.className = "red";
                     break
                 case connext4.Players.Geel:
-                    document.getElementById("myTable").rows[0].cells[0].className = "Yellow";
-                    document.getElementById("myTable").rows[0].cells[0].textContent = "O"
+                    cell.className = "yellow";
                     break
                 default:
-                    document.getElementById("myTable").rows[0].cells[0].textContent = ""
-                    document.getElementById("myTable").rows[0].cells[0].className = ""
+                    cell.className = ""
             }
         }
     }
@@ -58,11 +56,19 @@ function Connext4() {
             if (player != currentPlayer) {
                 alert("Wrong Player: " + player + ", let " + currentPlayer + " play")
                 selectedColumnId = -1
+                return
             }
 
             if (columnId < 1 || columnId > grid[0].length) {
                 alert("Column: " + columnId + " doesnot exist")
                 selectedColumnId = -1
+                return
+            }
+
+            if (grid[0][columnId - 1] != players.Empty) {
+                alert("Column: " + columnId + " is full")
+                selectedColumnId = -1
+                return
             }
 
             selectedColumnId = columnId
@@ -75,12 +81,14 @@ function Connext4() {
             }
 
             var rowId = 0
-            console.table(grid[0]);
-            while (grid[rowId][selectedColumnId - 1] == players.Empty) {
+
+            while (rowId < grid.length && grid[rowId][selectedColumnId - 1] == players.Empty) {
                 rowId++
             }
 
-            grid[rowId][selectedColumnId - 1] == currentPlayer
+            console.log((rowId - 1) + " " + (selectedColumnId - 1));
+
+            grid[rowId - 1][selectedColumnId - 1] = currentPlayer
         },
 
         handleresult = function () {
